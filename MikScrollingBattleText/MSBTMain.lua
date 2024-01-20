@@ -114,6 +114,8 @@ local SPELL_RAIN_OF_FIRE			= GetSkillName(5740)
 -- Private variables.
 -------------------------------------------------------------------------------
 
+-- Prevent tainting global _.
+local _
 -- Dynamically created frames for receiving events.
 local eventFrame
 local throttleFrame

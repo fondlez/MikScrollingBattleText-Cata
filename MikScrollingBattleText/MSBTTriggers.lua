@@ -50,6 +50,8 @@ local MAX_RAID_MEMBERS = 40
 -------------------------------------------------------------------------------
 -- Private variables.
 -------------------------------------------------------------------------------
+-- Prevent tainting global _.
+local _
 
 -- Holds dynamically created frame for receiving events.
 local eventFrame

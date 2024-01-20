@@ -43,6 +43,8 @@ local ITEM_TYPE_QUEST = select(10, GetAuctionItemClasses())
 -- Private variables.
 -------------------------------------------------------------------------------
 
+-- Prevent tainting global _.
+local _
 -- Color patterns for item qualities.
 local qualityPatterns = {}
 

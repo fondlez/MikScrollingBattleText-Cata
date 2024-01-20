@@ -54,6 +54,8 @@ local ITEM_INFO_TEXTURE_POSITION = 10
 -- Private variables.
 -------------------------------------------------------------------------------
 
+-- Prevent tainting global _.
+local _
 -- Dynamically created frame for receiving events.
 local eventFrame = CreateFrame("Frame")
 

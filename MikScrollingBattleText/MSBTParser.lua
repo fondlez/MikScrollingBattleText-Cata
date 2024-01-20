@@ -77,6 +77,8 @@ local FLAGS_MY_GUARDIAN	= bit_bor(AFFILIATION_MINE, REACTION_FRIENDLY, CONTROL_H
 -- Private variables.
 -------------------------------------------------------------------------------
 
+-- Prevent tainting global _.
+local _
 -- Dynamically created frames for receiving events and tooltip info.
 local eventFrame
 

@@ -130,6 +130,8 @@ local SPELL_VAMPIRIC_TOUCH			= GetSkillName(34914)
 -------------------------------------------------------------------------------
 -- Private variables.
 -------------------------------------------------------------------------------
+--- Prevent tainting global _.
+local _
 
 -- Dynamically created frame for receiving events.
 local eventFrame

@@ -36,6 +36,8 @@ local fonts = MSBTMedia.fonts
 -- Private constants.
 -------------------------------------------------------------------------------
 
+-- Prevent tainting global _.
+local _
 local DEFAULT_PROFILE_NAME = "Default"
 local DEFAULT_FONT_NAME = L.DEFAULT_FONT_NAME
 local DEFAULT_SCROLL_AREA = "Notification"
