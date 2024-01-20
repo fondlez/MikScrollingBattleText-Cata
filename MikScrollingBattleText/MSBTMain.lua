@@ -345,7 +345,7 @@ local function FormatEvent(message, amount, damageType, overhealAmount, overkill
 
    -- Color it with the correct color if coloring is enabled.
    local overkillSettings = currentProfile.overkill
-   partialAmount = string_gsub(overkillSettings.trailer, "%%a", overkillAmount)
+   partialAmount = string_gsub(overkillSettings.trailer, "%%a", partialAmount)
    if (not currentProfile.partialColoringDisabled) then
     partialAmount = string_format("|cFF%02x%02x%02x%s|r", overkillSettings.colorR * 255, overkillSettings.colorG * 255, overkillSettings.colorB * 255, partialAmount)
    end
