@@ -27,6 +27,8 @@ local Print = MikSBT.Print
 local EraseTable = MikSBT.EraseTable
 local DisplayEvent = MikSBT.Animations.DisplayEvent
 local TestFlagsAny = MSBTParser.TestFlagsAny
+local ShortenNumber = MikSBT.ShortenNumber
+local SeparateNumber = MikSBT.SeparateNumber
 
 -- Local reference to various variables for faster access.
 local REACTION_HOSTILE = MSBTParser.REACTION_HOSTILE
@@ -545,7 +547,16 @@ local function DisplayTrigger(triggerSettings, sourceName, sourceClass, recipien
  if (extraSkillName and string_find(message, "%e", 1, true)) then message = string_gsub(message, "%%e", extraSkillName) end 
 
  -- Substitute amount.
- if (amount and string_find(message, "%a", 1, true)) then message = string_gsub(message, "%%a", amount) end
+ if (amount and string_find(message, "%a", 1, true)) then
+  -- Shorten amount with SI suffixes or separate into digit groups depending on options.
+  local formattedAmount = amount
+  if (currentProfile.shortenNumbers) then
+   formattedAmount = ShortenNumber(formattedAmount, currentProfile.shortenNumberPrecision)
+  elseif (currentProfile.separateNumbers) then
+   formattedAmount = SeparateNumber(formattedAmount)
+  end
+  message = string_gsub(message, "%%a", formattedAmount)
+ end
 
  -- Override the texture if there is an icon skill for the trigger.
  if (iconSkill) then

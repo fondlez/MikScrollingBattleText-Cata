@@ -2507,7 +2507,28 @@ local function SpamTab_Create()
    end
  )
  controls.mergeSwingsCheckbox = checkbox
- 
+ -- Shorten numbers checkbox
+ checkbox = MSBTControls.CreateCheckbox(tabFrame)
+ objLocale = L.CHECKBOXES["shortenNumbers"]
+ checkbox:Configure(28, objLocale.label, objLocale.tooltip)
+ checkbox:SetPoint("TOPLEFT", controls.mergeSwingsCheckbox, "BOTTOMLEFT", 0, 0)
+ checkbox:SetClickHandler(
+   function (this, isChecked)
+    MSBTProfiles.SetOption(nil, "shortenNumbers", isChecked)
+   end
+ )
+ controls.shortenNumbersCheckbox = checkbox
+ -- Group numbers by thousands checkbox
+ checkbox = MSBTControls.CreateCheckbox(tabFrame)
+ objLocale = L.CHECKBOXES["groupNumbers"]
+ checkbox:Configure(28, objLocale.label, objLocale.tooltip)
+ checkbox:SetPoint("TOPLEFT", controls.shortenNumbersCheckbox, "BOTTOMLEFT", 0, 0)
+ checkbox:SetClickHandler(
+   function (this, isChecked)
+    MSBTProfiles.SetOption(nil, "groupNumbers", isChecked)
+   end
+ )
+ controls.groupNumbersCheckbox = checkbox
  -- Merge exclusions button.
  button = MSBTControls.CreateOptionButton(tabFrame)
  objLocale = L.BUTTONS["mergeExclusions"]
@@ -2632,6 +2653,8 @@ local function SpamTab_OnShow()
  controls.allPowerCheckbox:SetChecked(currentProfile.showAllPowerGains)
  controls.abbreviateCheckbox:SetChecked(currentProfile.abbreviateAbilities)
  controls.mergeSwingsCheckbox:SetChecked(not currentProfile.mergeSwingsDisabled)
+ controls.shortenNumbersCheckbox:SetChecked(currentProfile.shortenNumbers)
+ controls.groupNumbersCheckbox:SetChecked(currentProfile.groupNumbers)
  controls.hideSkillsCheckbox:SetChecked(currentProfile.hideSkills)
  controls.hideNamesCheckbox:SetChecked(currentProfile.hideNames)
  controls.hideFullOverhealsCheckbox:SetChecked(currentProfile.hideFullOverheals)

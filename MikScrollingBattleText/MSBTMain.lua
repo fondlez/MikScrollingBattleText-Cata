@@ -32,6 +32,8 @@ local GetTime = GetTime
 local GetSpellInfo = GetSpellInfo
 local EraseTable = MikSBT.EraseTable
 local GetSkillName = MikSBT.GetSkillName
+local ShortenNumber = MikSBT.ShortenNumber
+local SeparateNumber = MikSBT.SeparateNumber
 local DisplayEvent = MSBTAnimations.DisplayEvent
 local IsScrollAreaActive = MSBTAnimations.IsScrollAreaActive
 local IsScrollAreaIconShown = MSBTAnimations.IsScrollAreaIconShown
@@ -252,8 +254,15 @@ local function FormatPartialEffects(absorbAmount, blockAmount, resistAmount, isG
  -- Set the partial effect text if there are settings for it, it's enabled, and it's valid.
  local trailer = effectSettings and effectSettings.trailer
  if (trailer and not effectSettings.disabled) then
+  -- Shorten amount with SI suffixes or separate into digit groups depending on options.
+  local formattedAmount = amount
+  if (currentProfile.shortenNumbers) then
+   formattedAmount = ShortenNumber(formattedAmount, currentProfile.shortenNumberPrecision)
+  elseif (currentProfile.groupNumbers) then
+   formattedAmount = SeparateNumber(formattedAmount)
+  end
   -- Substitute the amount into the trailer.
-  trailer = string_gsub(trailer, "%%a", amount)
+  trailer = string_gsub(trailer, "%%a", formattedAmount)
   
   -- Color the text if coloring isn't disabled.
   if (not currentProfile.partialColoringDisabled) then
@@ -308,9 +317,16 @@ local function FormatEvent(message, amount, damageType, overhealAmount, overkill
    -- Deduct the overheal amount from the total amount healed.
    amount = amount - overhealAmount
 
+   -- Shorten overheal amount with SI suffixes or separate into digit groups depending on options.
+   partialAmount = overhealAmount
+   if (currentProfile.shortenNumbers) then
+    partialAmount = ShortenNumber(partialAmount, currentProfile.shortenNumberPrecision)
+   elseif (currentProfile.groupNumbers) then
+    partialAmount = SeparateNumber(partialAmount)
+   end
    -- Color it with the correct color if coloring is enabled.
    local overhealSettings = currentProfile.overheal
-   partialAmount = string_gsub(overhealSettings.trailer, "%%a", overhealAmount)
+   partialAmount = string_gsub(overhealSettings.trailer, "%%a", partialAmount)
    if (not currentProfile.partialColoringDisabled) then
     partialAmount = string_format("|cFF%02x%02x%02x%s|r", overhealSettings.colorR * 255, overhealSettings.colorG * 255, overhealSettings.colorB * 255, partialAmount)
    end
@@ -319,6 +335,13 @@ local function FormatEvent(message, amount, damageType, overhealAmount, overkill
   elseif (overkillAmount and overkillAmount > 0 and not currentProfile.overkill.disabled) then
    -- Deduct the overkill amount from the total amount of damage done.
    amount = amount - overkillAmount
+   -- Shorten overkill amount with SI suffixes or separate into digit groups depending on options.
+   partialAmount = overkillAmount
+   if (currentProfile.shortenNumbers) then
+    partialAmount = ShortenNumber(partialAmount, currentProfile.shortenNumberPrecision)
+   elseif (currentProfile.groupNumbers) then
+    partialAmount = SeparateNumber(partialAmount)
+   end
 
    -- Color it with the correct color if coloring is enabled.
    local overkillSettings = currentProfile.overkill
@@ -333,12 +356,18 @@ local function FormatEvent(message, amount, damageType, overhealAmount, overkill
   local formattedAmount = amount
   if (powerType == powerTypes["ECLIPSE"]) then formattedAmount = math_abs(amount) end
 
+  -- Shorten amount with SI suffixes or separate into digit groups depending on options.
+  if (currentProfile.shortenNumbers) then
+   formattedAmount = ShortenNumber(formattedAmount, currentProfile.shortenNumberPrecision)
+  elseif (currentProfile.groupNumbers) then
+   formattedAmount = SeparateNumber(formattedAmount)
+  end
   -- Get the hex color for the damage type if there is one and coloring is enabled.
   if (damageType and not ignoreDamageColoring and not currentProfile.damageColoringDisabled) then
    -- Color the amount according to the damage type if there is one and it's enabled.
    local damageSettings = currentProfile[damageColorProfileEntries[damageType]]
    if (damageSettings and not damageSettings.disabled) then
-    formattedAmount = string_format("|cFF%02x%02x%02x%d|r", damageSettings.colorR * 255, damageSettings.colorG * 255, damageSettings.colorB * 255, amount)
+    formattedAmount = string_format("|cFF%02x%02x%02x%s|r", damageSettings.colorR * 255, damageSettings.colorG * 255, damageSettings.colorB * 255, formattedAmount)
    end
   end -- Damage type and damage coloring is enabled.
 
